@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Yay! 💖</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  font-family: "Comic Sans MS", cursive, sans-serif;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #fde7ef;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card {
+  background: #fff;
+  width: 380px;
+  max-width: 92%;
+  padding: 20px;
+  border-radius: 24px;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.2);
+}
+
+/* REMOVE TYPE INDICATORS */
+button,
+.date,
+.option {
+  outline: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* HEADER */
+.header {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.header h2 {
+  color: #e83e8c;
+  margin-bottom: 6px;
+}
+
+.header p {
+  font-size: 14px;
+  color: #555;
+}
+
+/* SECTIONS */
+.section {
+  margin: 18px 0;
+}
+
+.section h4 {
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #333;
+}
+
+/* DATE PICKER */
+.dates {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.date {
+  padding: 12px 0;
+  border-radius: 999px;
+  background: #f3f3f3;
+  text-align: center;
+  cursor: pointer;
+}
+
+.date.active {
+  background: #ff7aa2;
+  color: white;
+}
+
+/* OPTIONS GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.option {
+  background: #f8f8f8;
+  border-radius: 14px;
+  padding: 12px 6px;
+  text-align: center;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.option span {
+  display: block;
+  font-size: 20px;
+  margin-bottom: 6px;
+}
+
+.option.active {
+  border-color: #ff7aa2;
+  background: #fff0f6;
+}
+
+/* CONFIRM BUTTON */
+.confirm {
+  margin-top: 18px;
+  width: 100%;
+  padding: 14px;
+  border-radius: 999px;
+  border: none;
+  background: #4cd964;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+  <div class="header">
+    <h2>Yay! I love you! I knew you’d say yes 💕</h2>
+    <p>Let’s plan our date na My Baby Kaina 🥰</p>
+  </div>
+
+  <!-- DATE -->
+  <div class="section" id="date-section">
+    <h4>Pick a day in February 💌</h4>
+    <div class="dates">
+      <div class="date active">14</div>
+      <div class="date">15</div>
+    </div>
+  </div>
+
+  <!-- FOOD -->
+  <div class="section" id="food-section">
+    <h4>What do you wanna eat? 😋</h4>
+    <div class="grid">
+      <div class="option"><span>🍜</span>Ramen</div>
+      <div class="option"><span>🍨</span>Ice Cream</div>
+      <div class="option"><span>🥩</span>Steak</div>
+      <div class="option"><span>🍗</span>Chicken</div>
+      <div class="option"><span>🤔</span>Others</div>
+    </div>
+  </div>
+
+  <!-- EXTRAS -->
+  <div class="section" id="extras-section">
+    <h4>Special request? 💖</h4>
+    <div class="grid">
+      <div class="option"><span>🎬</span>Movie</div>
+      <div class="option"><span>🍜</span>Anthony Bourdain</div>
+      <div class="option"><span>🎮</span>Play Games</div>
+    </div>
+  </div>
+
+  <button class="confirm">Pick food first 😘</button>
+
+</div>
+
+<!-- 🎵 HAPPY SOUND -->
+<audio id="happySound" src="492a1f26-6546-45a0-9bfe-b60bb30d674b.mp3" preload="auto"></audio>
+
+<script>
+/* PLAY HAPPY SOUND ON LOAD */
+window.addEventListener("load", () => {
+  const happySound = document.getElementById("happySound");
+  happySound.currentTime = 0;
+  happySound.play().catch(() => {});
+});
+
+/* DATE: single select */
+document.querySelectorAll(".date").forEach(date => {
+  date.addEventListener("click", () => {
+    document.querySelectorAll(".date").forEach(d => d.classList.remove("active"));
+    date.classList.add("active");
+  });
+});
+
+/* OPTIONS: multi select */
+document.querySelectorAll(".option").forEach(option => {
+  option.addEventListener("click", () => {
+    option.classList.toggle("active");
+  });
+});
+
+/* SAVE + REDIRECT */
+document.querySelector(".confirm").addEventListener("click", () => {
+  const date =
+    document.querySelector("#date-section .date.active")?.textContent || "";
+
+  const foods = [...document.querySelectorAll(
+    "#food-section .option.active"
+  )].map(o => o.innerText.trim());
+
+  const extras = [...document.querySelectorAll(
+    "#extras-section .option.active"
+  )].map(o => o.innerText.trim());
+
+  localStorage.setItem("date", date);
+  localStorage.setItem("foods", JSON.stringify(foods));
+  localStorage.setItem("extras", JSON.stringify(extras));
+
+  window.location.href = "final.html";
+});
+</script>
+
+</body>
+</html>
